@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import sys
+
 import requests
 from apiclient.discovery import build
 from httplib2 import Http
@@ -12,7 +14,11 @@ def download_photos_by_ids(ids=[]):
     output = []
 
     service = setup_api()
-    for _id in ids:
+    length = len(ids)
+    for i, _id in enumerate(ids):
+        sys.stdout.write('\r')
+        sys.stdout.write('downloading: %s/%s' % (i+1, length))
+        sys.stdout.flush()
         result = service.mediaItems().get(mediaItemId=_id).execute()
         url = result['baseUrl']
         r = requests.get(url)
@@ -23,6 +29,8 @@ def download_photos_by_ids(ids=[]):
             output.append(result['filename'])
         else:
             return 1
+    sys.stdout.write('\n')
+    sys.stdout.flush()
     return output
 
 def get_albums():
