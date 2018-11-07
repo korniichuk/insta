@@ -1,11 +1,12 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import os
+import requests
+from fbi import getpassword
 
+import s3
 from collage import make_collage
 from photos import *
-from s3 import upload_file
 
 # Get list of all Google Photos albums
 get_albums()
@@ -25,9 +26,18 @@ for i, filename in enumerate(filenames):
     sys.stdout.write('\r')
     sys.stdout.write('uploading: %s/%s' % (i+1, length))
     sys.stdout.flush()
-    upload_file(filename, bucket_name)
+    s3.upload_file(filename, bucket_name)
 sys.stdout.write('\n')
 sys.stdout.flush()
 
 # Make photo collage
-make_collage(filenames, 'inta.png', 600, 300)
+make_collage(filenames, 'insta.png', 600, 300)
+
+# Send photo collage to grandma
+path = '~/.key/insta.enc'
+token = getpassword(path)
+data = {'file':('insta.png', open('insta.png', 'rb'), 'png')}
+params = {'initial_comment':'Hello, World!', 'title':'insta.png',
+          'filename':'insta.png', 'token':token, 'channels':['#family']}
+r = requests.post("https://slack.com/api/files.upload", params=params,
+                  files=data)
