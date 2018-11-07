@@ -1,6 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import os
+
+from collage import make_collage
 from photos import *
 from s3 import upload_file
 
@@ -25,3 +28,6 @@ for i, filename in enumerate(filenames):
     upload_file(filename, bucket_name)
 sys.stdout.write('\n')
 sys.stdout.flush()
+
+# Make photo collage
+make_collage(filenames, 'inta.png', 600, 300)
