@@ -1,6 +1,6 @@
 # Insta
 **Name:** insta<br>
-**Description:** Insta sends photos to your grandma<br>
+**Description:** Insta backups photos from Google Photos to Amazon S3 and sends photo collage to your grandma<br>
 **GitHub:** https://github.com/korniichuk/insta
 
 ## How it works
